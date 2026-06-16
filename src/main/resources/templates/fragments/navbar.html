@@ -9,11 +9,20 @@
 
     <!-- Right: Header Stats & Actions -->
     <div class="d-flex align-items-center gap-3">
-        <!-- Date display -->
+        <!-- Date display (Safe JavaScript date loading) -->
         <div class="d-none d-md-flex align-items-center gap-2 text-muted small me-2">
             <i class="bi bi-calendar3"></i>
-            <span th:text="${#temporals.format(#temporals.createNow(), 'EEEE, MMMM dd, yyyy')}">Tuesday, June 16, 2026</span>
+            <span id="navbarDateDisplay"></span>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const dateSpan = document.getElementById('navbarDateDisplay');
+                if (dateSpan) {
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    dateSpan.textContent = new Date().toLocaleDateString(undefined, options);
+                }
+            });
+        </script>
         
         <!-- Theme Toggle Button -->
         <button class="btn btn-secondary btn-sm p-0 d-flex align-items-center justify-content-center" id="themeToggle" style="border-radius: 8px; width: 36px; height: 36px;" onclick="toggleTheme()" title="Toggle Theme">

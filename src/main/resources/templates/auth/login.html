@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/favicon.ico}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In - ExpenseManager</title>
     <!-- Theme configuration head injector -->
@@ -68,7 +69,7 @@
             <!-- Remember me -->
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <div class="form-check m-0">
-                    <input class="form-check-input bg-transparent border-secondary border-opacity-50" type="checkbox" id="remember-me" name="remember-me">
+                    <input class="form-check-input" type="checkbox" id="remember-me" name="remember-me" value="on">
                     <label class="form-check-label text-muted small" for="remember-me">
                         Remember me
                     </label>

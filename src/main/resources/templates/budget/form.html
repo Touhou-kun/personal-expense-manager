@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/favicon.ico}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Set Budget - ExpenseManager</title>
     <!-- Theme configuration head injector -->
@@ -60,10 +61,10 @@
 
                         <!-- Amount Field -->
                         <div class="mb-3">
-                            <label for="amount" class="form-label text-muted small fw-medium">Monthly Limit Amount ($)</label>
+                            <label for="amount" class="form-label text-muted small fw-medium">Monthly Limit Amount (VND)</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-transparent border-end-0 border-secondary border-opacity-25 text-muted">$</span>
-                                <input type="number" step="0.01" id="amount" th:field="*{amount}" class="form-control border-start-0" placeholder="0.00" required>
+                                <span class="input-group-text bg-transparent border-end-0 border-secondary border-opacity-10 text-muted">VND</span>
+                                <input type="number" step="1" min="1" inputmode="numeric" id="amount" th:field="*{amount}" class="form-control border-start-0" placeholder="1000000" required>
                             </div>
                             <div class="text-danger small mt-1" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount error</div>
                         </div>
@@ -73,7 +74,7 @@
                             <div class="col-12 col-md-6 mb-3 mb-md-0">
                                 <label for="month" class="form-label text-muted small fw-medium">Target Month</label>
                                 <select id="month" th:field="*{month}" class="form-select" required>
-                                    <option th:each="m : ${months}" th:value="${m}" th:text="${T(java.time.Month).of(m).name()}"></option>
+                                    <option th:each="m : ${months}" th:value="${m.value}" th:text="${m.name}"></option>
                                 </select>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('month')}" th:errors="*{month}">Month error</div>
                             </div>

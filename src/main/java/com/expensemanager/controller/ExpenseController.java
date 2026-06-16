@@ -18,6 +18,8 @@ import java.util.List;
 @RequestMapping("/expenses")
 public class ExpenseController {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(ExpenseController.class);
+
     private final ExpenseService expenseService;
     private final CategoryService categoryService;
 
@@ -49,6 +51,7 @@ public class ExpenseController {
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
+        logger.info("Entering GET /expenses/new");
         ExpenseDto dto = new ExpenseDto();
         dto.setTransactionDate(LocalDate.now()); // default to today
         
@@ -64,7 +67,9 @@ public class ExpenseController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
+        logger.info("Entering POST /expenses/new with DTO payload: {}", expenseDto);
         if (result.hasErrors()) {
+            logger.warn("Validation failed for ExpenseDto: errors={}", result.getAllErrors());
             model.addAttribute("categories", categoryService.getCategoriesForCurrentUserAndType(CategoryType.EXPENSE));
             return "expense/form";
         }
@@ -74,6 +79,7 @@ public class ExpenseController {
             redirectAttributes.addFlashAttribute("successMessage", "Expense added successfully!");
             return "redirect:/expenses";
         } catch (Exception ex) {
+            logger.error("Error creating expense: ", ex);
             model.addAttribute("errorMessage", ex.getMessage());
             model.addAttribute("categories", categoryService.getCategoriesForCurrentUserAndType(CategoryType.EXPENSE));
             return "expense/form";

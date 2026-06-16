@@ -16,15 +16,46 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleResourceNotFound(ResourceNotFoundException ex, Model model) {
-        logger.warn("Resource not found exception: {}", ex.getMessage());
+        logger.warn("Exception Handled: class={}, message={}, cause={}", 
+            ex.getClass().getName(), ex.getMessage(), (ex.getCause() != null ? ex.getCause().toString() : "none"));
         model.addAttribute("errorMessage", ex.getMessage());
         return "error/404";
+    }
+
+    @ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleEntityNotFound(jakarta.persistence.EntityNotFoundException ex, Model model) {
+        logger.warn("Exception Handled: class={}, message={}, cause={}", 
+            ex.getClass().getName(), ex.getMessage(), (ex.getCause() != null ? ex.getCause().toString() : "none"));
+        model.addAttribute("errorMessage", "The requested entity could not be found.");
+        return "error/404";
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNoResourceFound(org.springframework.web.servlet.resource.NoResourceFoundException ex, Model model) {
+        logger.warn("Exception Handled: class={}, message={}, cause={}", 
+            ex.getClass().getName(), ex.getMessage(), (ex.getCause() != null ? ex.getCause().toString() : "none"));
+        model.addAttribute("errorMessage", "The requested resource could not be found.");
+        model.addAttribute("exceptionDetails", ex.getMessage());
+        return "error/404";
+    }
+
+    @ExceptionHandler(org.thymeleaf.exceptions.TemplateInputException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleTemplateInputException(org.thymeleaf.exceptions.TemplateInputException ex, Model model) {
+        logger.error("Exception Handled: class={}, message={}, cause={}", 
+            ex.getClass().getName(), ex.getMessage(), (ex.getCause() != null ? ex.getCause().toString() : "none"), ex);
+        model.addAttribute("errorMessage", "Template parsing error occurred.");
+        model.addAttribute("exceptionDetails", ex.getMessage());
+        return "error/500";
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleIllegalArgument(IllegalArgumentException ex, Model model) {
-        logger.warn("Illegal argument exception: {}", ex.getMessage());
+        logger.warn("Exception Handled: class={}, message={}, cause={}", 
+            ex.getClass().getName(), ex.getMessage(), (ex.getCause() != null ? ex.getCause().toString() : "none"));
         model.addAttribute("errorMessage", ex.getMessage());
         return "error/500";
     }
@@ -32,7 +63,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleGlobalException(Exception ex, Model model) {
-        logger.error("Unhandled system exception caught: ", ex);
+        logger.error("Exception Handled: class={}, message={}, cause={}", 
+            ex.getClass().getName(), ex.getMessage(), (ex.getCause() != null ? ex.getCause().toString() : "none"), ex);
         model.addAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
         model.addAttribute("exceptionDetails", ex.getMessage());
         return "error/500";

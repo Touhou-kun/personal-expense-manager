@@ -35,10 +35,12 @@ public class BudgetDto {
     private Long categoryId;
 
     private String categoryName;
+    private String monthName;
 
     // Dynamically computed fields for status
     private BigDecimal currentSpending;
     private BigDecimal remainingAmount;
     private boolean exceeded;
     private BigDecimal exceededAmount;
+    private double percent;
 }

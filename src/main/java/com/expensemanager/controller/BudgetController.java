@@ -1,6 +1,7 @@
 package com.expensemanager.controller;
 
 import com.expensemanager.dto.BudgetDto;
+import com.expensemanager.dto.MonthInfo;
 import com.expensemanager.enums.CategoryType;
 import com.expensemanager.service.BudgetService;
 import com.expensemanager.service.CategoryService;
@@ -38,6 +39,9 @@ public class BudgetController {
 
         List<BudgetDto> budgets = budgetService.getBudgetStatusForMonthAndYear(filterMonth, filterYear);
         model.addAttribute("budgets", budgets);
+        
+        String[] monthNames = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        model.addAttribute("selectedMonthName", monthNames[filterMonth]);
         
         // Pass drop-down selection data
         model.addAttribute("selectedMonth", filterMonth);
@@ -104,10 +108,11 @@ public class BudgetController {
         return "redirect:/budgets?month=" + month + "&year=" + year;
     }
 
-    private List<Integer> getMonthList() {
-        List<Integer> list = new ArrayList<>();
+    private List<MonthInfo> getMonthList() {
+        List<MonthInfo> list = new ArrayList<>();
+        String[] names = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
         for (int i = 1; i <= 12; i++) {
-            list.add(i);
+            list.add(new MonthInfo(i, names[i]));
         }
         return list;
     }

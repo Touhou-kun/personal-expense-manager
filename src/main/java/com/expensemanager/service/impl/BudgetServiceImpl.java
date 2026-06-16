@@ -145,10 +145,22 @@ public class BudgetServiceImpl implements BudgetService {
 
         BigDecimal currentSpending = expenseRepository.sumTotalByUserAndCategoryIdAndDateRange(
                 user, budget.getCategory().getId(), startDate, endDate);
+        if (currentSpending == null) {
+            currentSpending = BigDecimal.ZERO;
+        }
 
         dto.setCurrentSpending(currentSpending);
+        
+        String[] monthNames = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        if (budget.getMonth() >= 1 && budget.getMonth() <= 12) {
+            dto.setMonthName(monthNames[budget.getMonth()]);
+        }
 
         BigDecimal limitAmount = budget.getAmount();
+        if (limitAmount == null) {
+            limitAmount = BigDecimal.ZERO;
+        }
+        
         BigDecimal difference = limitAmount.subtract(currentSpending);
 
         if (difference.compareTo(BigDecimal.ZERO) >= 0) {
@@ -160,5 +172,13 @@ public class BudgetServiceImpl implements BudgetService {
             dto.setExceeded(true);
             dto.setExceededAmount(difference.negate());
         }
+
+        double percent = 0.0;
+        if (limitAmount.compareTo(BigDecimal.ZERO) > 0) {
+            percent = currentSpending.multiply(BigDecimal.valueOf(100))
+                    .divide(limitAmount, 1, java.math.RoundingMode.HALF_UP)
+                    .doubleValue();
+        }
+        dto.setPercent(percent);
     }
 }

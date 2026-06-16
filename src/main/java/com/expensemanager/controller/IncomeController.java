@@ -18,6 +18,8 @@ import java.util.List;
 @RequestMapping("/incomes")
 public class IncomeController {
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(IncomeController.class);
+
     private final IncomeService incomeService;
     private final CategoryService categoryService;
 
@@ -49,6 +51,7 @@ public class IncomeController {
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
+        logger.info("Entering GET /incomes/new");
         IncomeDto dto = new IncomeDto();
         dto.setTransactionDate(LocalDate.now()); // default to today
         
@@ -64,7 +67,9 @@ public class IncomeController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
+        logger.info("Entering POST /incomes/new with DTO payload: {}", incomeDto);
         if (result.hasErrors()) {
+            logger.warn("Validation failed for IncomeDto: errors={}", result.getAllErrors());
             model.addAttribute("categories", categoryService.getCategoriesForCurrentUserAndType(CategoryType.INCOME));
             return "income/form";
         }
@@ -74,6 +79,7 @@ public class IncomeController {
             redirectAttributes.addFlashAttribute("successMessage", "Income added successfully!");
             return "redirect:/incomes";
         } catch (Exception ex) {
+            logger.error("Error creating income: ", ex);
             model.addAttribute("errorMessage", ex.getMessage());
             model.addAttribute("categories", categoryService.getCategoriesForCurrentUserAndType(CategoryType.INCOME));
             return "income/form";

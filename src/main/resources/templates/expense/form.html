@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/favicon.ico}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${expense.id != null ? 'Edit Expense - ExpenseManager' : 'Log Expense - ExpenseManager'}">Log Expense - ExpenseManager</title>
     <!-- Theme configuration head injector -->
@@ -24,7 +25,8 @@
     <div th:replace="~{fragments/sidebar :: sidebar('expenses')}"></div>
 
     <!-- Header Navbar Fragment -->
-    <div th:replace="~{fragments/navbar :: navbar(${expense.id != null ? 'Modify Expense Item' : 'Record New Expense'})}"></div>
+    <div th:if="${expense.id != null}" th:replace="~{fragments/navbar :: navbar('Modify Expense Item')}"></div>
+    <div th:unless="${expense.id != null}" th:replace="~{fragments/navbar :: navbar('Record New Expense')}"></div>
 
     <!-- Main Workspace -->
     <main class="main-wrapper animate-fade-in">
@@ -45,7 +47,7 @@
                     </div>
 
                     <!-- Expense Form -->
-                    <form th:action="${expense.id != null ? '/expenses/edit/' + expense.id : '/expenses/new'}" th:object="${expense}" method="post">
+                    <form th:action="${expense.id != null} ? @{/expenses/edit/{id}(id=${expense.id})} : @{/expenses/new}" th:object="${expense}" method="post">
                         
                         <!-- Title Field -->
                         <div class="mb-3">
@@ -57,10 +59,10 @@
                         <div class="row mb-3">
                             <!-- Amount Field -->
                             <div class="col-12 col-md-6 mb-3 mb-md-0">
-                                <label for="amount" class="form-label text-muted small fw-medium">Amount ($)</label>
+                                <label for="amount" class="form-label text-muted small fw-medium">Amount (VND)</label>
                                 <div class="input-group">
-                                    <span class="input-group-text bg-transparent border-end-0 border-secondary border-opacity-10 text-muted">$</span>
-                                    <input type="number" step="0.01" id="amount" th:field="*{amount}" class="form-control border-start-0" placeholder="0.00" required>
+                                    <span class="input-group-text bg-transparent border-end-0 border-secondary border-opacity-10 text-muted">VND</span>
+                                    <input type="number" step="1" min="1" inputmode="numeric" id="amount" th:field="*{amount}" class="form-control border-start-0" placeholder="100000" required>
                                 </div>
                                 <div class="text-danger small mt-1" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount error</div>
                             </div>

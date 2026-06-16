@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/favicon.ico}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Expenses - ExpenseManager</title>
     <!-- Theme configuration head injector -->
@@ -106,7 +107,7 @@
                             </td>
                             <td class="text-muted" th:text="${exp.transactionDate}">2026-06-16</td>
                             <td class="text-muted text-truncate" style="max-width: 250px;" th:text="${exp.description != null && !exp.description.isEmpty() ? exp.description : '-'}">Rent payment</td>
-                            <td class="fw-bold text-danger" th:text="${'-$' + #numbers.formatDecimal(exp.amount, 1, 'COMMA', 2, 'POINT')}">-$500.00</td>
+                            <td class="fw-bold text-danger" th:text="${'-' + #numbers.formatDecimal(exp.amount, 1, 'POINT', 0, 'COMMA') + ' VND'}">-500.000 VND</td>
                             <td class="text-end">
                                 <div class="d-inline-flex gap-2">
                                     <a th:href="@{/expenses/edit/{id}(id=${exp.id})}" class="btn btn-secondary btn-sm px-2 py-1" style="border-radius: 6px;">

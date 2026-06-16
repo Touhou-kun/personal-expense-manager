@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" th:href="@{/favicon.ico}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${category.id != null ? 'Edit Category - ExpenseManager' : 'Add Category - ExpenseManager'}">Add Category - ExpenseManager</title>
     <!-- Theme configuration head injector -->
@@ -24,7 +25,8 @@
     <div th:replace="~{fragments/sidebar :: sidebar('categories')}"></div>
 
     <!-- Header Navbar Fragment -->
-    <div th:replace="~{fragments/navbar :: navbar(${category.id != null ? 'Modify Category' : 'Register New Category'})}"></div>
+    <div th:if="${category.id != null}" th:replace="~{fragments/navbar :: navbar('Modify Category')}"></div>
+    <div th:unless="${category.id != null}" th:replace="~{fragments/navbar :: navbar('Register New Category')}"></div>
 
     <!-- Main Workspace -->
     <main class="main-wrapper animate-fade-in">
@@ -45,7 +47,7 @@
                     </div>
 
                     <!-- Category Form -->
-                    <form th:action="${category.id != null ? '/categories/edit/' + category.id : '/categories/new'}" th:object="${category}" method="post">
+                    <form th:action="${category.id != null} ? @{/categories/edit/{id}(id=${category.id})} : @{/categories/new}" th:object="${category}" method="post">
                         
                         <!-- Name Field -->
                         <div class="mb-3">

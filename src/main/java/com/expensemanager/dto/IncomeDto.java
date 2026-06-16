@@ -36,6 +36,6 @@ public class IncomeDto {
     private String categoryName;
 
     @NotNull(message = "Transaction date is required")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate transactionDate;
 }
