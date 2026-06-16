@@ -1,0 +1,61 @@
+<div th:fragment="sidebar(activePage)" class="sidebar d-flex flex-column justify-content-between">
+    <div>
+        <!-- App Brand -->
+        <div class="d-flex align-items-center gap-3 mb-5 px-2">
+            <div class="bg-primary d-flex align-items-center justify-content-center rounded-3" style="width: 42px; height: 42px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);">
+                <i class="bi bi-wallet2 text-white fs-4"></i>
+            </div>
+            <div>
+                <h5 class="m-0 fw-bold tracking-wide">ExpenseManager</h5>
+                <small class="text-muted" th:text="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'Admin Panel' : 'Workspace'}">Workspace</small>
+            </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="nav flex-column">
+            <a class="nav-link" th:classappend="${activePage == 'dashboard' ? 'active' : ''}" th:href="@{/dashboard}">
+                <i class="bi bi-grid-1x2-fill fs-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-link" th:classappend="${activePage == 'expenses' ? 'active' : ''}" th:href="@{/expenses}">
+                <i class="bi bi-graph-down-arrow fs-5"></i>
+                <span>Expenses</span>
+            </a>
+            <a class="nav-link" th:classappend="${activePage == 'incomes' ? 'active' : ''}" th:href="@{/incomes}">
+                <i class="bi bi-graph-up-arrow fs-5"></i>
+                <span>Incomes</span>
+            </a>
+            <a class="nav-link" th:classappend="${activePage == 'categories' ? 'active' : ''}" th:href="@{/categories}">
+                <i class="bi bi-tags-fill fs-5"></i>
+                <span>Categories</span>
+            </a>
+            <a class="nav-link" th:classappend="${activePage == 'budgets' ? 'active' : ''}" th:href="@{/budgets}">
+                <i class="bi bi-calculator-fill fs-5"></i>
+                <span>Budgets</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- User Section & Logout -->
+    <div>
+        <hr class="my-4" style="border-color: var(--border-color); opacity: 1;">
+        <div class="d-flex align-items-center justify-content-between px-2 mb-3">
+            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 38px; height: 38px; min-width: 38px;"
+                     th:text="${#strings.substring(#authentication.name, 0, 1).toUpperCase()}">
+                    U
+                </div>
+                <div class="text-truncate">
+                    <div class="fw-semibold text-truncate" th:text="${#authentication.name}">Username</div>
+                    <small class="text-muted text-truncate" th:text="${#authorization.expression('hasRole(''ROLE_ADMIN'')') ? 'Administrator' : 'User'}">User</small>
+                </div>
+            </div>
+        </div>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-secondary w-100 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px; padding: 10px;">
+                <i class="bi bi-box-arrow-left"></i>
+                <span>Sign Out</span>
+            </button>
+        </form>
+    </div>
+</div>

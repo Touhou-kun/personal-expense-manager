@@ -1,0 +1,46 @@
+<div th:fragment="footer" class="mt-5 pt-4 border-top opacity-50" style="border-color: var(--border-color) !important;">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 text-muted pb-4">
+        <div>
+            <span class="small">&copy; 2026 Personal Expense Manager. All rights reserved.</span>
+        </div>
+        <div class="d-flex gap-3">
+            <span class="small">Graduation Project</span>
+            <span class="small">&bull;</span>
+            <span class="small">Spring Boot + Thymeleaf</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle & Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core Theme Toggle Engine Script -->
+    <script>
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeToggleIcon');
+            if (icon) {
+                if (theme === 'dark') {
+                    icon.className = 'bi bi-moon-fill';
+                } else {
+                    icon.className = 'bi bi-sun-fill';
+                }
+            }
+        }
+        
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Dispatch custom event to notify charts or other elements
+            window.dispatchEvent(new Event('themeChanged'));
+        }
+        
+        // Initialize active icon state
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            updateThemeIcon(currentTheme);
+        });
+    </script>
+</div>

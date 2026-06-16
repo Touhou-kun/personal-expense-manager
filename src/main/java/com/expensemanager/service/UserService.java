@@ -1,0 +1,13 @@
+package com.expensemanager.service;
+
+import com.expensemanager.dto.UserRegistrationDto;
+import com.expensemanager.entity.User;
+import java.util.Optional;
+
+public interface UserService {
+    User registerNewUser(UserRegistrationDto registrationDto);
+    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+}

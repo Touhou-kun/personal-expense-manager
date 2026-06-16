@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${category.id != null ? 'Edit Category - ExpenseManager' : 'Add Category - ExpenseManager'}">Add Category - ExpenseManager</title>
+    <!-- Theme configuration head injector -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+<body>
+
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('categories')}"></div>
+
+    <!-- Header Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar(${category.id != null ? 'Modify Category' : 'Register New Category'})}"></div>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper animate-fade-in">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+                <!-- Form Glass Card -->
+                <div class="glass-card p-4">
+                    <!-- Heading -->
+                    <div class="d-flex align-items-center gap-2 mb-4 border-bottom border-secondary border-opacity-10 pb-3">
+                        <i class="bi bi-tag-fill text-primary fs-4"></i>
+                        <h5 class="fw-bold m-0" th:text="${category.id != null ? 'Update Category Details' : 'Enter Category Setup'}">Enter Category Setup</h5>
+                    </div>
+
+                    <!-- General Error Message -->
+                    <div th:if="${errorMessage}" class="alert alert-danger border-0 text-danger bg-danger bg-opacity-10 rounded-3 small mb-4 py-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> <span th:text="${errorMessage}">Error Message</span>
+                    </div>
+
+                    <!-- Category Form -->
+                    <form th:action="${category.id != null ? '/categories/edit/' + category.id : '/categories/new'}" th:object="${category}" method="post">
+                        
+                        <!-- Name Field -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label text-muted small fw-medium">Category Name</label>
+                            <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="e.g. Subscriptions, Gifts, Dividends..." required>
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+                        </div>
+
+                        <!-- Type Field (Select Dropdown) -->
+                        <div class="mb-4">
+                            <label for="type" class="form-label text-muted small fw-medium">Classification / Type</label>
+                            <select id="type" th:field="*{type}" class="form-select" required>
+                                <option value="">-- Choose Type --</option>
+                                <option th:each="t : ${types}" th:value="${t}" th:text="${t.name()}"></option>
+                            </select>
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('type')}" th:errors="*{type}">Type error</div>
+                            <small class="text-muted mt-1 d-block">This determines whether the category applies to expense items or income entries.</small>
+                        </div>
+
+                        <!-- Action Controls -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a th:href="@{/categories}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:text="${category.id != null ? 'Save Changes' : 'Create Category'}">Create Category</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Fragment -->
+        <div th:replace="~{fragments/footer :: footer}"></div>
+    </main>
+
+</body>
+</html>

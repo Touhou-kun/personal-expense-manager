@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${income.id != null ? 'Edit Income - ExpenseManager' : 'Log Income - ExpenseManager'}">Log Income - ExpenseManager</title>
+    <!-- Theme configuration head injector -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom Style -->
+    <link rel="stylesheet" th:href="@{/css/layout.css}">
+</head>
+<body>
+
+    <!-- Sidebar Fragment -->
+    <div th:replace="~{fragments/sidebar :: sidebar('incomes')}"></div>
+
+    <!-- Header Navbar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar(${income.id != null ? 'Modify Income Item' : 'Record New Income'})}"></div>
+
+    <!-- Main Workspace -->
+    <main class="main-wrapper animate-fade-in">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8 col-xl-6">
+                <!-- Form Glass Card -->
+                <div class="glass-card p-4">
+                    <!-- Heading -->
+                    <div class="d-flex align-items-center gap-2 mb-4 border-bottom border-secondary border-opacity-10 pb-3">
+                        <i class="bi bi-graph-up-arrow text-success fs-4"></i>
+                        <h5 class="fw-bold m-0" th:text="${income.id != null ? 'Update Income Details' : 'Enter Income Transaction'}">Enter Income Transaction</h5>
+                    </div>
+
+                    <!-- General Error Message -->
+                    <div th:if="${errorMessage}" class="alert alert-danger border-0 text-danger bg-danger bg-opacity-10 rounded-3 small mb-4 py-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i> <span th:text="${errorMessage}">Error Message</span>
+                    </div>
+
+                    <!-- Income Form -->
+                    <form th:action="${income.id != null ? '/incomes/edit/' + income.id : '/incomes/new'}" th:object="${income}" method="post">
+                        
+                        <!-- Title Field -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label text-muted small fw-medium">Title / Concept</label>
+                            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="e.g. Salary, Freelance project, Investment bonus..." required>
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <!-- Amount Field -->
+                            <div class="col-12 col-md-6 mb-3 mb-md-0">
+                                <label for="amount" class="form-label text-muted small fw-medium">Amount ($)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-transparent border-end-0 border-secondary border-opacity-10 text-muted">$</span>
+                                    <input type="number" step="0.01" id="amount" th:field="*{amount}" class="form-control border-start-0" placeholder="0.00" required>
+                                </div>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount error</div>
+                            </div>
+                            
+                            <!-- Date Field -->
+                            <div class="col-12 col-md-6">
+                                <label for="transactionDate" class="form-label text-muted small fw-medium">Transaction Date</label>
+                                <input type="date" id="transactionDate" th:field="*{transactionDate}" class="form-control" required>
+                                <div class="text-danger small mt-1" th:if="${#fields.hasErrors('transactionDate')}" th:errors="*{transactionDate}">Date error</div>
+                            </div>
+                        </div>
+
+                        <!-- Category Selection -->
+                        <div class="mb-3">
+                            <label for="categoryId" class="form-label text-muted small fw-medium">Category</label>
+                            <select id="categoryId" th:field="*{categoryId}" class="form-select" required>
+                                <option value="">-- Choose Category --</option>
+                                <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                            </select>
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}">Category error</div>
+                            <small class="text-muted mt-1 d-block">Categories can be managed in the <a th:href="@{/categories}" class="text-primary text-decoration-none">Categories section</a>.</small>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label text-muted small fw-medium">Description (Optional)</label>
+                            <textarea id="description" th:field="*{description}" class="form-control" rows="3" placeholder="Enter notes or tags for this transaction..."></textarea>
+                            <div class="text-danger small mt-1" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description error</div>
+                        </div>
+
+                        <!-- Action Controls -->
+                        <div class="d-flex gap-3 justify-content-end">
+                            <a th:href="@{/incomes}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                <span th:text="${income.id != null ? 'Save Changes' : 'Log Transaction'}">Log Transaction</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Fragment -->
+        <div th:replace="~{fragments/footer :: footer}"></div>
+    </main>
+
+</body>
+</html>

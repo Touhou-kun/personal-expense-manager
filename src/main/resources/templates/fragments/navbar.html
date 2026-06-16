@@ -1,0 +1,58 @@
+<div th:fragment="navbar(pageTitle)" class="navbar-top">
+    <!-- Left: Section Title & Responsive Toggle -->
+    <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-secondary d-lg-none px-2 py-1" id="sidebarToggle" onclick="document.querySelector('.sidebar').classList.toggle('active')">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+        <h4 class="m-0 fw-bold" th:text="${pageTitle}">Section Title</h4>
+    </div>
+
+    <!-- Right: Header Stats & Actions -->
+    <div class="d-flex align-items-center gap-3">
+        <!-- Date display -->
+        <div class="d-none d-md-flex align-items-center gap-2 text-muted small me-2">
+            <i class="bi bi-calendar3"></i>
+            <span th:text="${#temporals.format(#temporals.createNow(), 'EEEE, MMMM dd, yyyy')}">Tuesday, June 16, 2026</span>
+        </div>
+        
+        <!-- Theme Toggle Button -->
+        <button class="btn btn-secondary btn-sm p-0 d-flex align-items-center justify-content-center" id="themeToggle" style="border-radius: 8px; width: 36px; height: 36px;" onclick="toggleTheme()" title="Toggle Theme">
+            <i class="bi bi-sun-fill" id="themeToggleIcon"></i>
+        </button>
+        
+        <!-- Quick add button dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-primary btn-sm d-flex align-items-center gap-2 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="padding: 8px 16px; border-radius: 8px;">
+                <i class="bi bi-plus-circle"></i>
+                <span>Quick Add</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end border-0 shadow-lg mt-2">
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/expenses/new}">
+                        <i class="bi bi-graph-down-arrow text-danger"></i>
+                        <span>Add Expense</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/incomes/new}">
+                        <i class="bi bi-graph-up-arrow text-success"></i>
+                        <span>Add Income</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider border-secondary opacity-25"></li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/categories/new}">
+                        <i class="bi bi-tag"></i>
+                        <span>New Category</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/budgets/new}">
+                        <i class="bi bi-calculator"></i>
+                        <span>Set Budget</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
